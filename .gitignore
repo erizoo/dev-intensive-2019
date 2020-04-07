@@ -1,4 +1,8 @@
 # Built application files
+*.apk
+*.ap_
+*.aab
+# Built application files
 build/
 
 # Files for the ART/Dalvik VM
@@ -38,3 +42,21 @@ google-services.json
 
 # Version control
 vcs.xml
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Version control
+vcs.xml
+
+# lint
+lint/intermediates/
+lint/generated/
+lint/outputs/
+lint/tmp/
+lint/reports/
