@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val (r, g, b) = color
         benderImage.setColorFilter(Color.rgb(r, g, b), PorterDuff.Mode.MULTIPLY)
         textTxt.text = phrase
-        hideKeyboard(this, sendBtn)
+        hideKeyboard()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
