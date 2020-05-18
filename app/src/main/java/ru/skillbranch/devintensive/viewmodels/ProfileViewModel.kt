@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.skillbranch.devintensive.models.Profile
-import ru.skillbranch.devintensive.ui.repositories.PreferencesRepository
+import ru.skillbranch.devintensive.repositories.PreferencesRepository
 
 class ProfileViewModel : ViewModel() {
 
