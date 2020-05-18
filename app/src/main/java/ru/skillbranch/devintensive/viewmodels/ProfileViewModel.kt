@@ -9,7 +9,7 @@ import ru.skillbranch.devintensive.ui.repositories.PreferencesRepository
 
 class ProfileViewModel : ViewModel() {
 
-    private val repository = PreferencesRepository
+    val repository = PreferencesRepository
 
     private val _appTheme = MutableLiveData<Int>()
     val theme: LiveData<Int> = _appTheme
