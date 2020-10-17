@@ -2,6 +2,7 @@ package ru.skillbranch.devintensive.repositories
 
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+//import androidx.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatDelegate
 import ru.skillbranch.devintensive.App
 import ru.skillbranch.devintensive.models.Profile
@@ -17,17 +18,15 @@ object PreferencesRepository {
     private const val APP_THEME = "APP_THEME"
 
     private val prefs: SharedPreferences by lazy {
-        PreferenceManager.getDefaultSharedPreferences(App.applicationContext())
+        val ctx = App.applicationContext()
+        PreferenceManager.getDefaultSharedPreferences(ctx)
     }
 
-    fun getProfile() = Profile(
-            prefs.getString(FIRST_NAME, "") ?: "",
-            prefs.getString(LAST_NAME, "") ?: "",
-            prefs.getString(ABOUT, "") ?: "",
-            prefs.getString(REPOSITORY, "") ?: "",
-            prefs.getInt(RATING, 0),
-            prefs.getInt(RESPECT, 0)
-    )
+    fun saveAppTheme(theme: Int) {
+        putValue(APP_THEME to theme)
+    }
+
+    fun getAppTheme(): Int = prefs.getInt(APP_THEME, AppCompatDelegate.MODE_NIGHT_NO)
 
     fun saveProfile(profile: Profile) {
         with(profile) {
@@ -40,14 +39,20 @@ object PreferencesRepository {
         }
     }
 
-    fun saveAppTheme(value: Int) {
-        putValue(APP_THEME to value)
-    }
+    fun getProfile(): Profile =
+        Profile(
+            prefs.getString(FIRST_NAME, "")!!,
+            prefs.getString(LAST_NAME, "")!!,
+            prefs.getString(ABOUT, "")!!,
+            prefs.getString(REPOSITORY, "")!!,
+            prefs.getInt(RATING, 0),
+            prefs.getInt(RESPECT, 0)
+        )
 
-    fun getAppTheme() = prefs.getInt(APP_THEME, AppCompatDelegate.MODE_NIGHT_NO)
+    private fun putValue(pair: Pair<String, Any>) = with(prefs.edit()) {
+        val key = pair.first
+        val value = pair.second
 
-    private fun putValue(pair: Pair<String, Any>) = with(prefs.edit()){
-        val (key, value) = pair
         when (value) {
             is String -> putString(key, value)
             is Int -> putInt(key, value)
@@ -56,8 +61,6 @@ object PreferencesRepository {
             is Float -> putFloat(key, value)
             else -> error("Only primitives types can be stored in Shared Preferences")
         }
-
         apply()
     }
-
 }

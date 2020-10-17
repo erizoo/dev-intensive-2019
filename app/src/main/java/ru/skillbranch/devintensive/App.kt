@@ -10,7 +10,9 @@ class App : Application() {
     companion object {
         private var instance: App? = null
 
-        fun applicationContext(): Context = instance!!.applicationContext
+        fun applicationContext(): Context {
+            return instance!!.applicationContext
+        }
     }
 
     init {
@@ -19,7 +21,8 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        AppCompatDelegate.setDefaultNightMode(PreferencesRepository.getAppTheme())
+        PreferencesRepository.getAppTheme().also {
+            AppCompatDelegate.setDefaultNightMode(it)
+        }
     }
-
 }

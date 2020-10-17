@@ -9,31 +9,47 @@ import ru.skillbranch.devintensive.repositories.PreferencesRepository
 
 class ProfileViewModel : ViewModel() {
 
-    val repository = PreferencesRepository
-
-    private val _appTheme = MutableLiveData<Int>()
-    val theme: LiveData<Int> = _appTheme
-
-    private val _profileData = MutableLiveData<Profile>()
-    val profileData: LiveData<Profile> = _profileData
+    private val repository: PreferencesRepository = PreferencesRepository
+    private val profileData = MutableLiveData<Profile>()
+    private val appTheme = MutableLiveData<Int>()
+    private val isRepoValid = MutableLiveData<Boolean>()
 
     init {
-        _profileData.value = repository.getProfile()
-        _appTheme.value = repository.getAppTheme()
+        profileData.value = repository.getProfile()
+        appTheme.value = repository.getAppTheme()
     }
 
-    fun saveProfileData(profile: Profile){
+    fun isRepoValid(): LiveData<Boolean> = isRepoValid
+
+    fun getProfileData(): LiveData<Profile> = profileData
+
+    fun saveProfileData(profile: Profile) {
         repository.saveProfile(profile)
-        _profileData.value = profile
+        profileData.value = profile
     }
+
+    fun getTheme(): LiveData<Int> = appTheme
 
     fun switchTheme() {
-        if (_appTheme.value == AppCompatDelegate.MODE_NIGHT_YES) {
-            _appTheme.value = AppCompatDelegate.MODE_NIGHT_NO
+        if (appTheme.value == AppCompatDelegate.MODE_NIGHT_YES) {
+            appTheme.value = AppCompatDelegate.MODE_NIGHT_NO
         } else {
-            _appTheme.value = AppCompatDelegate.MODE_NIGHT_YES
+            appTheme.value = AppCompatDelegate.MODE_NIGHT_YES
         }
-        repository.saveAppTheme(_appTheme.value!!)
+        repository.saveAppTheme(appTheme.value!!)
     }
 
+    fun repositoryValidation(repository: String) {
+        isRepoValid.value = repository.isEmpty() || repository.matches(
+            Regex("^(https://)?(www.)?(github.com/)(?!(${getRegexExceptions()})(?=/|$))(?![\\W])(?!\\w+[-]{2})[a-zA-Z0-9-]+(?<![-])(/)?$")
+        )
+    }
+
+    private fun getRegexExceptions(): String {
+        val exceptions = arrayOf(
+            "enterprise", "features", "topics", "collections", "trending", "events", "join",
+            "pricing", "nonprofit", "customer-stories", "security", "login", "marketplace"
+        )
+        return exceptions.joinToString("|")
+    }
 }
